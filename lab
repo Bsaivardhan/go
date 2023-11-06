@@ -1,4 +1,173 @@
 package main
+import (
+	"fmt"
+	"html/template"
+	"net/http"
+)
+type ContactDetails struct {
+	Name    string
+	Email   string
+	Subject string
+	Message string
+}
+func main() {
+	tmpl := template.Must(template.ParseFiles("contact.html"))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			tmpl.Execute(w, nil)
+			return
+		}
+		ContactDetails := ContactDetails{
+			Name:    r.FormValue("name"),
+			Email:   r.FormValue("email"),
+			Subject: r.FormValue("subject"),
+			Message: r.FormValue("message"),
+		}
+		fmt.Printf("%+v\n", ContactDetails)
+		tmpl.Execute(w, struct{ Success bool }{true})
+	})
+
+	http.ListenAndServe(":8080", nil)
+}
+{{if .Success}}
+<p>Your message has been sent!</p>
+{{else}}
+<p>Contact</p>
+<form action="/contact" method="POST">
+    <label>Name:</label><br />
+    <input type="text" name="name"><br />
+    <label>Email:</label><br />
+    <input type="text" name="email"><br />
+    <label>Subject:</label><br />
+    <input type="text" name="subject"><br />
+    <label>Message:</label><br />
+    <textarea name="message"></textarea><br /><br />
+    <input type="submit">
+</form>
+{{end}}
+-----------------------week9-----------------------------------------
+package main
+import "fmt"
+func main() {
+	var num [100]int
+	var temp, sum, avg int
+	fmt.Print("Enter number of elements: ")
+	fmt.Scanln(&temp)
+	for i := 0; i < temp; i++ {
+		fmt.Print("Enter the number : ")
+		fmt.Scanln(&num[i])
+		sum += num[i]
+	}
+	avg = sum / temp
+	fmt.Printf("The Average of entered %d number(s) is %d", temp, avg)
+}
+------------------------week 10--------------------------------------------
+package main
+import "fmt"
+func removeDuplicates(s []string) []string {
+	bucket := make(map[string]bool)
+	var result []string
+	for _, str := range s {
+		if _, ok := bucket[str]; !ok {
+			bucket[str] = true
+			result = append(result, str)
+		}
+	}
+	return result
+}
+func main() {
+	array := []string{"hai", "cse", "batch", "2020", "cse", "hai", "section"}
+	fmt.Println("The given array of string is:", array)
+	fmt.Println()
+	result := removeDuplicates(array)
+	fmt.Println("The array obtained after removing the duplicate entries is:", result)
+}
+-----------------------------------------week11----------------------------------------------------
+package main
+import (
+	"fmt"
+	"sort"
+)
+func main() {
+	fmt.Println("Interger Reverse Sort")
+	num := []int{50, 90, 30, 10, 50}
+	sort.Sort(sort.Reverse(sort.IntSlice(num)))
+	fmt.Println(num)
+	fmt.Println()
+	fmt.Println("String Reverse Sort")
+	text := []string{"Japan", "UK", "Germany", "Australia", "INDIA"}
+	sort.Sort(sort.Reverse(sort.StringSlice(text)))
+	fmt.Println(text)
+}
+------------------------------------------week12--------------------------------------------------------
+package main
+import (
+	"fmt"
+	"strings"
+)
+func main() {
+	fmt.Println(strings.ContainsAny("Germany", "G"))
+	fmt.Println(strings.ContainsAny("Germany", "g"))
+	fmt.Println(strings.Contains("India", "In"))
+	fmt.Println(strings.Contains("Germany", "ger"))
+	fmt.Println(strings.Contains("Japan", "Jap"))
+	fmt.Println(strings.Count("malayalam", "m"))
+	fmt.Println(strings.Count("malayalam", "o"))
+	fmt.Println(strings.EqualFold("Cat", "cAt"))
+	fmt.Println(strings.EqualFold("India", "Indiana"))
+}
+------------------------------------------week14-------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"sync"
+)
+
+func main() {
+	runtime.GOMAXPROCS(3)
+	var processTest sync.WaitGroup
+	processTest.Add(3)
+	go func() {
+		defer processTest.Done()
+		for i := 0; i < 30; i++ {
+			for j := 51; j <= 100; j++ {
+				fmt.Printf(" %d", j)
+				if j == 100 {
+					fmt.Println()
+				}
+			}
+		}
+	}()
+	go func() {
+		defer processTest.Done()
+		for j := 0; j < 10; j++ {
+			for char := 'A'; char < 'A'+26; char++ {
+				fmt.Printf("%c ", char)
+				if char == 'Z' {
+					fmt.Println()
+				}
+			}
+		}
+	}()
+	go func() {
+		defer processTest.Done()
+		for i := 0; i < 30; i++ {
+			for j := 0; j <= 50; j++ {
+				fmt.Printf(" %d", j)
+				if j == 50 {
+					fmt.Println()
+				}
+			}
+		}
+	}()
+	processTest.Wait()
+}
+
+
+------------------------------------------------------------
+package main
 import "fmt"
 func lcm(temp1 int,temp2 int) {
 var lcmnum int =1
