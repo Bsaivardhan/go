@@ -334,25 +334,32 @@ string
 }
 ------------------------------------------------------------------------------------
 package main
-import "fmt"
+
+import (
+	"fmt"
+	"strings"
+)
+
+func isPalindrome(str string) bool {
+	str = strings.ToLower(strings.ReplaceAll(str, " ", ""))
+	for i, j := 0, len(str)-1; i < j; i, j = i+1, j-1 {
+		if str[i] != str[j] {
+			return false
+		}
+	}
+
+	return true
+}
+
 func main() {
-fmt.Println("Golang program to check for palindrome")
-var number,rem,temporary int
-var reverse int = 0
-number = 45454
-temporary=number
-for{
-rem = number%10
-reverse = reverse*10 + rem
-number /= 10
-if(number==0){
-break // Break Statement used to exit from loop
-}
-}
-if(temporary==reverse){
-fmt.Printf("Number %d is a Palindrome",temporary)
-}else{
-fmt.Printf("Number %d is not a Palindrome",temporary)
-}
+	var input string
+	fmt.Print("Enter a string: ")
+	fmt.Scanln(&input)
+
+	if isPalindrome(input) {
+		fmt.Println("The string is a palindrome.")
+	} else {
+		fmt.Println("The string is not a palindrome.")
+	}
 }
 
